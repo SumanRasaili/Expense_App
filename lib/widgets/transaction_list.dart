@@ -3,43 +3,56 @@ import 'package:intl/intl.dart';
 
 import '../models/transaction.dart';
 
-
 class TransactionList extends StatelessWidget {
-  
-     
-    const  TransactionList( this.transcations, {Key? key} ) : super(key: key);
-    final  List<Transaction> transcations;
-  
+  const TransactionList(this.transcations, {Key? key}) : super(key: key);
+  final List<Transaction> transcations;
+
   @override
   Widget build(BuildContext context) {
-    return  Container(
+    return Container(
       height: 300,
-      child:transcations.isEmpty ? Column( children: [ 
-       const  Text("Nothing Here",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24),),
-      const   SizedBox(height: 10,),
-        Image.asset("assets/images/nothing.jpg",fit: BoxFit.cover,)
-      ],): ListView.builder(
-        itemCount: transcations.length,
-        itemBuilder: (context, index) {
-          return Card(
-            elevation: 5,
-            margin: EdgeInsets.symmetric(horizontal: 5,vertical: 8),
-            child: ListTile(
-              leading: CircleAvatar(radius: 30,child:  Padding(padding: EdgeInsets.all(6),child: FittedBox(child: Text(transcations[index].amount.toStringAsFixed(2)))),),
-              title: Text(transcations[index].title,style: Theme.of(context).textTheme.headline6,) ,
-              subtitle: Text(DateFormat('yyyy-MM-dd').format(transcations[index].dateTime)),
-              
-          
-          
-          
-          
+      child: transcations.isEmpty
+          ? Column(
+              children: [
+                const Text(
+                  "Nothing Here",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Image.asset(
+                  "assets/images/nothing.jpg",
+                  fit: BoxFit.cover,
+                )
+              ],
+            )
+          : ListView.builder(
+              itemCount: transcations.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  elevation: 5,
+                  margin: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 30,
+                      child: Padding(
+                          padding: EdgeInsets.all(6),
+                          child: FittedBox(
+                              child: Text(transcations[index]
+                                  .amount
+                                  .toStringAsFixed(2)))),
+                    ),
+                    title: Text(
+                      transcations[index].title,
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    subtitle: Text(DateFormat('yyyy-MM-dd')
+                        .format(transcations[index].dateTime)),
+                  ),
+                );
+              },
             ),
-          );
-
-          
-        },
-        
-      ),
     );
   }
 }
