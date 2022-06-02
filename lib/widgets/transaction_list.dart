@@ -4,15 +4,16 @@ import 'package:intl/intl.dart';
 import '../models/transaction.dart';
 
 class TransactionList extends StatelessWidget {
-  const TransactionList(this.transcations, {Key? key}) : super(key: key);
+  const TransactionList(this.transcations, this.deleteTx, {Key? key})
+      : super(key: key);
   final List<Transaction> transcations;
+  final Function deleteTx;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 300,
-      child: transcations.isEmpty
-          ? Column(
+    return transcations.isEmpty
+        ? LayoutBuilder(builder: ((context, constraints) {
+            return Column(
               children: [
                 const Text(
                   "Nothing Here",
@@ -21,39 +22,54 @@ class TransactionList extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                Image.asset(
-                  "assets/images/nothing.jpg",
-                  fit: BoxFit.cover,
+                Container(
+                  height: constraints.maxHeight * 0.6,
+                  child: Image.asset(
+                    "assets/images/nothing.jpg",
+                    fit: BoxFit.cover,
+                  ),
                 )
               ],
-            )
-          : ListView.builder(
-              itemCount: transcations.length,
-              itemBuilder: (context, index) {
-                return Card(
+            );
+          }))
+        : ListView.builder(
+            itemCount: transcations.length,
+            itemBuilder: (context, index) {
+              return Card(
                   elevation: 5,
-                  margin: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
                   child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 30,
-                      child: Padding(
-                          padding: EdgeInsets.all(6),
-                          child: FittedBox(
-                              child: Text(transcations[index]
-                                  .amount
-                                  .toStringAsFixed(2)))),
-                    ),
-                    title: Text(
-                      transcations[index].title,
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    subtitle: Text(DateFormat('yyyy-MM-dd')
-                        .format(transcations[index].dateTime)),
-                  ),
-                );
-              },
-            ),
-    );
+                      leading: CircleAvatar(
+                        radius: 30,
+                        child: Padding(
+                            padding: const EdgeInsets.all(6),
+                            child: FittedBox(
+                                child: Text(transcations[index]
+                                    .amount
+                                    .toStringAsFixed(2)))),
+                      ),
+                      title: Text(
+                        transcations[index].title,
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      subtitle: Text(DateFormat('yyyy-MM-dd')
+                          .format(transcations[index].dateTime)),
+                      trailing: MediaQuery.of(context).size.width > 500
+                          ? TextButton.icon(
+                            
+                              onPressed: () => deleteTx(transcations[index].id),
+                              icon:  Icon(Icons.delete,color: Theme.of(context).errorColor,),
+                              label:  Text("Delete",style: TextStyle(color:Theme.of(context).errorColor),),
+                              
+                            )
+                          : IconButton(
+                              icon: const Icon(Icons.delete),
+                              color: Theme.of(context).errorColor,
+                              onPressed: () => deleteTx(transcations[index].id),
+                            )));
+            },
+          );
   }
 }
 // Card(
